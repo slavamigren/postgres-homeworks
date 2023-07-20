@@ -1,7 +1,9 @@
 import psycopg2
 import csv
-import pprint
+from dotenv import load_dotenv
+import os
 
+load_dotenv(dotenv_path='.env')
 
 with open('.\\north_data\customers_data.csv', 'r', encoding='utf-8') as file:
     rows = csv.DictReader(file, delimiter=',', quotechar='"')
@@ -21,18 +23,16 @@ with open('.\\north_data\employees_data.csv', 'r', encoding='utf-8') as file:
 with open('.\\north_data\orders_data.csv', 'r', encoding='utf-8') as file:
     rows = csv.DictReader(file, delimiter=',', quotechar='"')
     orders_data = [(int(i['order_id']),
-                       i['customer_id'],
-                       int(i['employee_id']),
-                       i['order_date'],
-                       i['ship_city']) for i in rows]
-
-
+                    i['customer_id'],
+                    int(i['employee_id']),
+                    i['order_date'],
+                    i['ship_city']) for i in rows]
 
 conn = psycopg2.connect(
-    host="localhost",
-    database="north",
-    user="postgres",
-    password="12345"
+    host=os.getenv("host"),
+    database=os.getenv("database"),
+    user=os.getenv("user"),
+    password=os.getenv("password")
 )
 
 try:
